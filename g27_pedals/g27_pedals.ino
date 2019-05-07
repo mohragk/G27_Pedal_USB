@@ -15,8 +15,6 @@ int RxAxisMax = 0;
 int RyAxisMin = 1023;
 int RyAxisMax = 0;
 
-const bool initAutoSendState = true; 
-
 
 void setup() {
   Joystick.begin();
