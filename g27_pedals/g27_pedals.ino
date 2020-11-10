@@ -11,30 +11,29 @@ constexpr int NUM_PEDALS{ 3 };
 int pedalMins[NUM_PEDALS];
 int pedalMaxs[NUM_PEDALS];
 
+constexpr int RANGE_LIMIT{ 1023 };
 
 void setup() {
     Joystick.begin();
 
     for (int pedalIndex = 0; pedalIndex < NUM_PEDALS; i++) {
-        pedalMins[pedalIndex]       = 1023;
-        pedalMaxs[pedalIndex]       = 0;
+        pedalMins[pedalIndex] = RANGE_LIMIT;
+        pedalMaxs[pedalIndex] = 0;
     }
     
 }
 
 // Returns a remapped value of the 'raw' position.
-// Raw values from the potentiometers might not be
-// full-range. To accomodate for that, we store the
-// minimum and maximum values from the sensor and
-// remap the position, wo we always get a full 0 - 1023
-// range for the pedal position.
-int getMappedPedalPosition(int pedal, int position) {
+// Raw values from the potentiometers might not be within a 0 - 1023 range. 
+// To accomodate for that, we store the minimum and maximum values from the sensor and
+// remap the position, so we always get a full 0 - 1023 range for that pedal's position.
+int getMappedPedalPosition(int pedal, int rawPosition) {
     // store (new) extremes of the pedal
-    pedalMins[pedal] = min(position, pedalMins[pedal]);
-    pedalMaxs[pedal] = max(position, pedalMaxs[pedal]);
+    pedalMins[pedal] = min(rawPosition, pedalMins[pedal]);
+    pedalMaxs[pedal] = max(rawPosition, pedalMaxs[pedal]);
 
     // remap the position to a 0 - 1023 range
-    int mappedPostion = map(position, pedalMins[pedal], pedalMaxs[pedal], 0 , 1023 );
+    int mappedPostion = map(rawPosition, pedalMins[pedal], pedalMaxs[pedal], 0 , RANGE_LIMIT);
     return mappedPostion;
 }
 
