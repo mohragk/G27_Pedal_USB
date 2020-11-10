@@ -40,16 +40,16 @@ int getMappedPedalPosition(int pedal, int rawPosition) {
 
 void loop() {
 
-    int clutchRawValue = analogRead(A0);
-    int mappedClutchPosition = getMappedPedalPosition(CLUTCH, clutchRawValue);
+    int rawClutchPosition = analogRead(A0);
+    int mappedClutchPosition = getMappedPedalPosition(CLUTCH, rawClutchPosition);
     Joystick.setZAxis(mappedClutchPosition);
 
-    int brakeRawValue = analogRead(A1);
-    int mappedBrakePosition = getMappedPedalPosition(BRAKE, brakeRawValue);
+    int rawBrakePosition = analogRead(A1);
+    int mappedBrakePosition = getMappedPedalPosition(BRAKE, rawBrakePosition);
     Joystick.setRxAxis(mappedBrakePosition);
 
-    int acceleratorRawValue = analogRead(A2);
-    int mappedAcceleratorPostion = getMappedPedalPosition(ACCELERATOR, acceleratorRawValue);
+    int rawAcceleratorPosition = analogRead(A2);
+    int mappedAcceleratorPostion = getMappedPedalPosition(ACCELERATOR, rawAcceleratorPosition);
     Joystick.setRyAxis(mappedAcceleratorPostion);
 
     delay(20);
