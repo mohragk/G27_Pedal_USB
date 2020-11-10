@@ -22,21 +22,24 @@ void setup() {
     
 }
 
-
-void setMinAndMaxForPedal(int pedal, int position) {
-    pedalMins[pedal] = min(analogValue, pedalMins[pedal]);
-    pedalMaxs[pedal] = max(analogValue, pedalMaxs[pedal]);
-}
-
+// Returns a remapped value of the 'raw' position.
+// Raw values from the potentiometers might not be
+// full-range. To accomodate for that, we store the
+// minimum and maximum values from the sensor and
+// remap the position, wo we always get a full 0 - 1023
+// range for the pedal position.
 int getMappedPedalPosition(int pedal, int position) {
-    setMinAndMaxForPedal(pedal, position);
+    // store (new) extremes of the pedal
+    pedalMins[pedal] = min(position, pedalMins[pedal]);
+    pedalMaxs[pedal] = max(position, pedalMaxs[pedal]);
+
+    // remap the position to a 0 - 1023 range
     int mappedPostion = map(position, pedalMins[pedal], pedalMaxs[pedal], 0 , 1023 );
     return mappedPostion;
 }
 
 
 void loop() {
-
 
     int clutchRawValue = analogRead(A0);
     int mappedClutchPosition = getMappedPedalPosition(CLUTCH, clutchRawValue);
