@@ -2,59 +2,54 @@
 
 Joystick_ Joystick;
 
-int zAxis_ = 0; 
-int RxAxis_ = 0;                    
-int RyAxis_ = 0;  
+#define CLUTCH 0
+#define BRAKE 1
+#define ACCELERATOR 2
 
-int zAxisMin = 1023;
-int zAxisMax = 0;
+constexpr int NUM_PEDALS{ 3 };
 
-int RxAxisMin = 1023;
-int RxAxisMax = 0;
-
-int RyAxisMin = 1023;
-int RyAxisMax = 0;
+int pedalMins[NUM_PEDALS];
+int pedalMaxs[NUM_PEDALS];
 
 
 void setup() {
-  Joystick.begin();
+    Joystick.begin();
+
+    for (int pedalIndex = 0; pedalIndex < NUM_PEDALS; i++) {
+        pedalMins[pedalIndex]       = 1023;
+        pedalMaxs[pedalIndex]       = 0;
+    }
+    
 }
 
 
-void calibrate()
-{
-  int newZAxis = analogRead(A0);
-  zAxisMin = min(newZAxis, zAxisMin);
-  zAxisMax = max(newZAxis, zAxisMax); 
+void setMinAndMaxForPedal(int pedal, int position) {
+    pedalMins[pedal] = min(analogValue, pedalMins[pedal]);
+    pedalMaxs[pedal] = max(analogValue, pedalMaxs[pedal]);
+}
 
-  int newRxAxis = analogRead(A1);
-  RxAxisMin = min(RxAxisMin, newRxAxis);
-  RxAxisMax = max(RxAxisMax, newRxAxis);
-
-
-  int newRyAxis = analogRead(A2);
-  RyAxisMin = min(RyAxisMin, newRyAxis);
-  RyAxisMax = max(RyAxisMax, newRyAxis);
-  
+int getMappedPedalPosition(int pedal, int position) {
+    setMinAndMaxForPedal(pedal, position);
+    int mappedPostion = map(position, pedalMins[pedal], pedalMaxs[pedal], 0 , 1023 );
+    return mappedPostion;
 }
 
 
 void loop() {
 
-  calibrate();
-  //should be Clutch
-  zAxis_ = analogRead(A0);
-  zAxis_ = map(zAxis_, zAxisMin, zAxisMax, 0 , 1023);
-  Joystick.setZAxis(zAxis_);
 
-  RxAxis_ = analogRead(A1);
-  RxAxis_ = map(RxAxis_, RxAxisMin, RxAxisMax, 0 , 1023);
-  Joystick.setRxAxis(RxAxis_);
-  
-  RyAxis_ = analogRead(A2);
-  RyAxis_ = map(RyAxis_, RyAxisMin, RyAxisMax, 0, 1023);
-  Joystick.setRyAxis(RyAxis_);
+    int clutchRawValue = analogRead(A0);
+    int mappedClutchPosition = getMappedPedalPosition(CLUTCH, clutchRawValue);
+    Joystick.setZAxis(mappedClutchPosition);
 
-  delay(20);
+    int brakeRawValue = analogRead(A1);
+    int mappedBrakePosition = getMappedPedalPosition(BRAKE, brakeRawValue);
+    Joystick.setRxAxis(mappedBrakePosition);
+
+    int acceleratorRawValue = analogRead(A2);
+    int mappedAcceleratorPostion = getMappedPedalPosition(ACCELERATOR, acceleratorRawValue);
+    Joystick.setRyAxis(mappedAcceleratorPostion);
+
+    delay(20);
   
 }
