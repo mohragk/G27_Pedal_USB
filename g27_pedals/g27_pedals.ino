@@ -16,7 +16,7 @@ constexpr int RANGE_LIMIT{ 1023 };
 void setup() {
     Joystick.begin();
 
-    for (int pedalIndex = 0; pedalIndex < NUM_PEDALS; i++) {
+    for (int pedalIndex = 0; pedalIndex < NUM_PEDALS; pedalIndex++) {
         pedalMins[pedalIndex] = RANGE_LIMIT;
         pedalMaxs[pedalIndex] = 0;
     }
