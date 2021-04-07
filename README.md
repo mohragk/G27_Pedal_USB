@@ -7,4 +7,4 @@ not output a full 0 - 1023 range, so the output is automatically mapped to outpu
 When first connected, it's important to depress all pedals fully to initially set this range.
 
 ## Joystick library
-This script uyses the following [Joystick library](https://github.com/MHeironimus/ArduinoJoystickLibrary ) so make sure this is installed in your Arduino IDE. DON'T USE THE BUILT-IN JOYSTICK LIBRARY THAT'S INCLUDED WITH ARDUINO!
+This script uses the following [Joystick library](https://github.com/MHeironimus/ArduinoJoystickLibrary ) so make sure this is installed in your Arduino IDE. DON'T USE THE BUILT-IN JOYSTICK LIBRARY THAT'S INCLUDED WITH ARDUINO!
